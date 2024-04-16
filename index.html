@@ -332,15 +332,17 @@
         
           
             <p>首先回顾路径追踪的原理，如下图</p>
-<img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png" alt="1713229011326" style="zoom:50%;" />
+<img src="/2024/04/16/GAMES101-作业7-踩坑指南/"  alt="1713229011326" style="zoom:50%;" />
 
+<p><img src="/image-20240416132834246.png" alt="image-20240416132834246"></p>
 <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。</p>
 <p>在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。</p>
 <p>为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计算。由于wi、ws分开计算，因此如果ws被物体挡住,或者wi打到光源均不计算。</p>
 <p>wi需要递归计算，通过神奇的Russian Roulette在减少递归层数的同时保持光照的期望不变。</p>
 <p>然后按照作业指南上的伪代码写就可以了</p>
-<img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121328730-1409855486.png" alt="1713230279835" style="zoom:80%;" />
+<img src="/2024/04/16/GAMES101-作业7-踩坑指南/"  alt="1713230279835" style="zoom:80%;" />
 
+<p><img src="/image-20240416132845514.png" alt="image-20240416132845514"></p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
 <li><p>右墙壁发黑：检查Bound3::IntersectP, <code>return t_enter &lt;= t_exit &amp;&amp; t_exit &gt;= 0;</code> 就可以</p>
 </li>
