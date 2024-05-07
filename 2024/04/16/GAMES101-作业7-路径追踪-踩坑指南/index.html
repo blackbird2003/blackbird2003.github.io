@@ -79,21 +79,17 @@
 
 
 
-<meta name="description" content="首先回顾路径追踪的原理，如下图     基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计算。">
+<meta name="description" content="首先回顾路径追踪的原理，如下图    基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GAMES101 作业7 路径追踪 踩坑指南">
 <meta property="og:url" content="http://example.com/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/index.html">
 <meta property="og:site_name" content="Blackbird">
-<meta property="og:description" content="首先回顾路径追踪的原理，如下图     基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计算。">
+<meta property="og:description" content="首先回顾路径追踪的原理，如下图    基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计">
 <meta property="og:locale">
 <meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png">
-<meta property="og:image" content="http://example.com/.com//image-20240416132834246.png">
-<meta property="og:image" content="http://example.com/.com//image-20240416133728725.png">
 <meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121328730-1409855486.png">
-<meta property="og:image" content="http://example.com/.com//image-20240416132845514.png">
-<meta property="og:image" content="http://example.com/.com//image-20240416133742442.png">
 <meta property="article:published_time" content="2024-04-16T04:35:32.000Z">
-<meta property="article:modified_time" content="2024-05-05T15:42:38.269Z">
+<meta property="article:modified_time" content="2024-05-07T02:05:02.526Z">
 <meta property="article:author" content="Wei Xianghan">
 <meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
@@ -338,11 +334,13 @@
       
 
       
-        <p>首先回顾路径追踪的原理，如下图</p>
+        <meta name="referrer" content="no-referrer">
+
+
+<p>首先回顾路径追踪的原理，如下图</p>
 <img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png" alt="1713229011326" style="zoom:50%;">
 
-<p><img src="/.com//image-20240416132834246.png" alt="image-20240416132834246"></p>
-<p><img src="/.com//image-20240416133728725.png" alt="image-20240416133728725"></p>
+
 <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。</p>
 <p>在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。</p>
 <p>为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计算。由于wi、ws分开计算，因此如果ws被物体挡住,或者wi打到光源均不计算。</p>
@@ -350,8 +348,8 @@
 <p>然后按照作业指南上的伪代码写就可以了</p>
 <img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121328730-1409855486.png" alt="1713230279835" style="zoom:80%;">
 
-<p><img src="/.com//image-20240416132845514.png" alt="image-20240416132845514"></p>
-<p><img src="/.com//image-20240416133742442.png" alt="image-20240416133742442"></p>
+
+
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
 <li>右墙壁发黑：检查Bound3::IntersectP, <code>return t_enter &lt;= t_exit &amp;&amp; t_exit &gt;= 0;</code> 就可以</li>
 <li>小正方体右上角有三角形黑块:检查Triangle::getIntersectionin Triangle.hpp，当时间小于0时不能判定为相交</li>
@@ -390,8 +388,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/" rel="next" title="GAMES101 作业7 踩坑指南">
-                <i class="fa fa-chevron-left"></i> GAMES101 作业7 踩坑指南
+              <a href="/2024/04/14/hello-world-nya/" rel="next" title="hello world nya">
+                <i class="fa fa-chevron-left"></i> hello world nya
               </a>
             
           </div>
@@ -489,7 +487,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
