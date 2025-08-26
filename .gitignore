@@ -1,0 +1,17 @@
+# 忽略依赖目录
+node_modules/
+
+# 忽略Hexo生成的静态文件
+public/
+
+# 忽略调试日志
+.debug.log
+
+# 忽略Hexo的数据库文件
+db.json
+
+# 忽略依赖安装临时目录
+.npm/
+
+# 忽略可能存在的部署目录
+.deploy*/
