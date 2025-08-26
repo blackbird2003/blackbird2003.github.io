@@ -1,3 +1,5 @@
+.deploy_git/
+
 # 忽略依赖目录
 node_modules/
 
