@@ -103,6 +103,6 @@ theme: next
 deploy:
   type: git
   repository: https://github.com/blackbird2003/blackbird2003.github.io
-  # branch: master
-  branch: gh-pages
+  branch: master
+
 
