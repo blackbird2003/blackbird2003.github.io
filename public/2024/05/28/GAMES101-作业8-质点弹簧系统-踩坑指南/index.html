@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="图形学," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="依赖库安装使用以下命令安装 1sudo apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev  不要直接从pdf上复制命令，pdf上的横线符号是错误的，会导致 unable to locate 段错误来自在 Win10 下配置 GAMES101 开发环境（WSL2） - 知乎 (zhihu.com)1.执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAMES101 作业8 质点弹簧系统 踩坑指南">
+<meta property="og:url" content="http://example.com/2024/05/28/GAMES101-%E4%BD%9C%E4%B8%9A8-%E8%B4%A8%E7%82%B9%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Blackbird">
+<meta property="og:description" content="依赖库安装使用以下命令安装 1sudo apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev  不要直接从pdf上复制命令，pdf上的横线符号是错误的，会导致 unable to locate 段错误来自在 Win10 下配置 GAMES101 开发环境（WSL2） - 知乎 (zhihu.com)1.执行">
+<meta property="og:locale">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202405/1928276-20240528160139051-1555565421.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202405/1928276-20240528170229905-433311491.png">
+<meta property="article:published_time" content="2024-05-28T10:05:38.000Z">
+<meta property="article:modified_time" content="2024-05-28T09:06:51.386Z">
+<meta property="article:author" content="Wei Xianghan">
+<meta property="article:tag" content="图形学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/1928276/202405/1928276-20240528160139051-1555565421.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2024/05/28/GAMES101-作业8-质点弹簧系统-踩坑指南/"/>
+
+
+
+
+
+  <title>GAMES101 作业8 质点弹簧系统 踩坑指南 | Blackbird</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blackbird</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yy, 加油</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/28/GAMES101-%E4%BD%9C%E4%B8%9A8-%E8%B4%A8%E7%82%B9%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blackbird">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GAMES101 作业8 质点弹簧系统 踩坑指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-05-28T18:05:38+08:00">
+                2024-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2024/05/28/GAMES101-%E4%BD%9C%E4%B8%9A8-%E8%B4%A8%E7%82%B9%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2024/05/28/GAMES101-作业8-质点弹簧系统-踩坑指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+
+
+<h4 id="依赖库安装"><a href="#依赖库安装" class="headerlink" title="依赖库安装"></a>依赖库安装</h4><p>使用以下命令安装</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev</span><br></pre></td></tr></table></figure>
+
+<p><strong>不要直接从pdf上复制命令</strong>，pdf上的横线符号是错误的，会导致 <code>unable to locate</code></p>
+<h4 id="段错误"><a href="#段错误" class="headerlink" title="段错误"></a>段错误</h4><p>来自<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/371080057">在 Win10 下配置 GAMES101 开发环境（WSL2） - 知乎 (zhihu.com)</a><br>1.执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LIBGL_ALWAYS_INDIRECT=0</span><br></pre></td></tr></table></figure>
+
+<p>2.下载MobaXterm，作为终端启动ropesim</p>
+<p>但是，我的MobaXterm中只有一个WSL，上文提到图形界面显示失败的问题并未解决。</p>
+<p>下面是通过StackOverflow等摸索而来：</p>
+<h4 id="GLFW-Error-Linux-Failed-to-watch-for-joystick…"><a href="#GLFW-Error-Linux-Failed-to-watch-for-joystick…" class="headerlink" title="GLFW Error: Linux: Failed to watch for joystick…"></a><strong>GLFW Error: Linux: Failed to watch for joystick…</strong></h4><p>执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> ~/.Xauthority </span><br></pre></td></tr></table></figure>
+
+<p>然后重启MobaXterm，</p>
+<p>然后执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">cp</span> ~/.Xauthority  /root/</span><br></pre></td></tr></table></figure>
+
+<p>然后使用sudo打开ropesim</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./ropesim</span><br></pre></td></tr></table></figure>
+
+<p>虽然仍会显示GLFW Error,但能够成功显示窗口。</p>
+<p><img src="https://img2023.cnblogs.com/blog/1928276/202405/1928276-20240528160139051-1555565421.png" alt="image-20240528170135716"></p>
+<h4 id="弹簧乱飞"><a href="#弹簧乱飞" class="headerlink" title="弹簧乱飞"></a>弹簧乱飞</h4><p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://games-cn.org/forums/topic/guanyuzuoye8deyixiewentijieda/">关于作业8的一些问题解答 – 计算机图形学与混合现实在线平台 (games-cn.org)</a></p>
+<p>对于显示欧拉法，是正常的，减小步长（如 <code>sudo ./ropesim -s 1024</code> ）可以减缓发散的时间（但还是会发散）</p>
+<p>对于Verlet方法，要在计算每个质点后把 <code>m-&gt;forces</code>清零，上面simulateEuler函数中已经给出，此处需要自己加上。</p>
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;CGL/vector2D.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mass.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;rope.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;spring.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> CGL &#123;</span><br><span class="line"></span><br><span class="line">    Rope::<span class="built_in">Rope</span>(Vector2D start, Vector2D end, <span class="type">int</span> num_nodes, <span class="type">float</span> node_mass, <span class="type">float</span> k, vector&lt;<span class="type">int</span>&gt; pinned_nodes)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// TODO (Part 1): Create a rope starting at `start`, ending at `end`, and containing `num_nodes` nodes.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Def of rope:</span></span><br><span class="line">        <span class="comment">// vector&lt;Mass *&gt; masses;</span></span><br><span class="line">        <span class="comment">// vector&lt;Spring *&gt; springs;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">          Mass(Vector2D position, float mass, bool pinned)</span></span><br><span class="line"><span class="comment">      : start_position(position), position(position), last_position(position),</span></span><br><span class="line"><span class="comment">        mass(mass), pinned(pinned) &#123;&#125;</span></span><br><span class="line"><span class="comment">        Spring(Mass *a, Mass *b, float k)</span></span><br><span class="line"><span class="comment">      : m1(a), m2(b), k(k), rest_length((a-&gt;position - b-&gt;position).norm()) &#123;&#125;</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; num_nodes; i++) &#123;</span><br><span class="line">            Vector2D pos = start + (end - start) * (<span class="number">1.0</span> * i / (num_nodes - <span class="number">1</span>));</span><br><span class="line">            masses.<span class="built_in">emplace_back</span>(<span class="keyword">new</span> <span class="built_in">Mass</span>(pos, node_mass, <span class="literal">false</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; num_nodes - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            springs.<span class="built_in">emplace_back</span>(<span class="keyword">new</span> <span class="built_in">Spring</span>(masses[i], masses[i + <span class="number">1</span>], k));</span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Comment-in this part when you implement the constructor</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i : pinned_nodes) &#123;</span><br><span class="line">            masses[i]-&gt;pinned = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Rope::simulateEuler</span><span class="params">(<span class="type">float</span> <span class="type">delta_t</span>, Vector2D gravity)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;s : springs)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// TODO (Part 2): Use Hooke&#x27;s law to calculate the force on a node</span></span><br><span class="line">            <span class="keyword">auto</span> len = (s-&gt;m1-&gt;position - s-&gt;m2-&gt;position).<span class="built_in">norm</span>();</span><br><span class="line">            s-&gt;m1-&gt;forces += - s-&gt;k * (s-&gt;m1-&gt;position - s-&gt;m2-&gt;position) / len * (len - s-&gt;rest_length);</span><br><span class="line">            s-&gt;m2-&gt;forces += - s-&gt;k * (s-&gt;m2-&gt;position - s-&gt;m1-&gt;position) / len * (len - s-&gt;rest_length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;m : masses)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!m-&gt;pinned)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// TODO (Part 2): Add the force due to gravity, then compute the new velocity and position</span></span><br><span class="line">                <span class="keyword">auto</span> a = m-&gt;forces / m-&gt;mass + gravity;</span><br><span class="line">                <span class="type">float</span> kd = <span class="number">0.005</span>; a += - kd * m-&gt;velocity / m-&gt;mass;  <span class="comment">// TODO (Part 2): Add global damping</span></span><br><span class="line">                <span class="keyword">auto</span> <span class="type">v_t</span> = m-&gt;velocity;</span><br><span class="line">                m-&gt;velocity += a * <span class="type">delta_t</span>;</span><br><span class="line">                <span class="comment">//m-&gt;position += v_t * delta_t;  //Explicit Method 不收敛</span></span><br><span class="line">                m-&gt;position += m-&gt;velocity * <span class="type">delta_t</span>; <span class="comment">// Semi-implicit method</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Reset all forces on each mass</span></span><br><span class="line">            m-&gt;forces = <span class="built_in">Vector2D</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Rope::simulateVerlet</span><span class="params">(<span class="type">float</span> <span class="type">delta_t</span>, Vector2D gravity)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;s : springs)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// TODO (Part 3): Simulate one timestep of the rope using explicit Verlet （solving constraints)</span></span><br><span class="line">            <span class="keyword">auto</span> len = (s-&gt;m1-&gt;position - s-&gt;m2-&gt;position).<span class="built_in">norm</span>();</span><br><span class="line">            s-&gt;m1-&gt;forces += -s-&gt;k * (s-&gt;m1-&gt;position - s-&gt;m2-&gt;position) / len * (len - s-&gt;rest_length);</span><br><span class="line">            s-&gt;m2-&gt;forces += -s-&gt;k * (s-&gt;m2-&gt;position - s-&gt;m1-&gt;position) / len * (len - s-&gt;rest_length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;m : masses)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!m-&gt;pinned)</span><br><span class="line">            &#123;</span><br><span class="line">                Vector2D temp_position = m-&gt;position;</span><br><span class="line">                <span class="comment">// TODO (Part 3.1): Set the new position of the rope mass</span></span><br><span class="line">                <span class="comment">// TODO (Part 4): Add global Verlet damping</span></span><br><span class="line">                <span class="keyword">auto</span> a = m-&gt;forces / m-&gt;mass + gravity;</span><br><span class="line">                <span class="type">float</span> damping_factor = <span class="number">0.00000000005</span>;</span><br><span class="line">                m-&gt;position = temp_position + (<span class="number">1</span> - damping_factor) * (temp_position - m-&gt;last_position) + a * <span class="type">delta_t</span> * <span class="type">delta_t</span>; </span><br><span class="line">                m-&gt;last_position = temp_position;</span><br><span class="line">            &#125;</span><br><span class="line">            m-&gt;forces = <span class="built_in">Vector2D</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2023.cnblogs.com/blog/1928276/202405/1928276-20240528170229905-433311491.png" alt="image-20240528180227291"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/05/06/TinyRendererNotes/" rel="next" title="TinyRendererNotes">
+                <i class="fa fa-chevron-left"></i> TinyRendererNotes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/07/14/test/" rel="prev" title="test">
+                test <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://atri2333.github.io/" title="Atri" target="_blank">Atri</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://cnblogs.com/vv123/" title="vv123" target="_blank">vv123</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">依赖库安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%B5%E9%94%99%E8%AF%AF"><span class="nav-number">2.</span> <span class="nav-text">段错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GLFW-Error-Linux-Failed-to-watch-for-joystick%E2%80%A6"><span class="nav-number">3.</span> <span class="nav-text">GLFW Error: Linux: Failed to watch for joystick…</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%B9%E7%B0%A7%E4%B9%B1%E9%A3%9E"><span class="nav-number">4.</span> <span class="nav-text">弹簧乱飞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">完整代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wei Xianghan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://example.com/2024/05/28/GAMES101-%E4%BD%9C%E4%B8%9A8-%E8%B4%A8%E7%82%B9%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/';
+          this.page.identifier = '2024/05/28/GAMES101-作业8-质点弹簧系统-踩坑指南/';
+          this.page.title = 'GAMES101 作业8 质点弹簧系统 踩坑指南';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
