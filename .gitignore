@@ -1,7 +1,8 @@
 .deploy_git/
 
-# 忽略依赖目录
-node_modules/
+
+# 忽略Hexo生成的静态文件
+public/
 
 # 忽略调试日志
 .debug.log
