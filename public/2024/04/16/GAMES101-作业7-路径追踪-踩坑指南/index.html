@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.24.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="首先回顾路径追踪的原理，如下图    基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAMES101 作业7 路径追踪 踩坑指南">
+<meta property="og:url" content="http://example.com/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Blackbird">
+<meta property="og:description" content="首先回顾路径追踪的原理，如下图    基本思想wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。 在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。 为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121328730-1409855486.png">
+<meta property="article:published_time" content="2024-04-16T05:35:32.000Z">
+<meta property="article:modified_time" content="2025-08-26T06:13:21.743Z">
+<meta property="article:author" content="Wei Xianghan">
+<meta property="article:tag" content="图形学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/","path":"2024/04/16/GAMES101-作业7-路径追踪-踩坑指南/","title":"GAMES101 作业7 路径追踪 踩坑指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GAMES101 作业7 路径追踪 踩坑指南 | Blackbird</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blackbird</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Goodbye</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="nav-number">1.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%8C%96"><span class="nav-number">3.1.</span> <span class="nav-text">多线程优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA"><span class="nav-number">3.2.</span> <span class="nav-text">路径追踪</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wei Xianghan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/16/GAMES101-%E4%BD%9C%E4%B8%9A7-%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA-%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wei Xianghan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blackbird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GAMES101 作业7 路径追踪 踩坑指南 | Blackbird">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GAMES101 作业7 路径追踪 踩坑指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-16 13:35:32" itemprop="dateCreated datePublished" datetime="2024-04-16T13:35:32+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-26 14:13:21" itemprop="dateModified" datetime="2025-08-26T14:13:21+08:00">2025-08-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><meta name="referrer" content="no-referrer">
+
+
+<p>首先回顾路径追踪的原理，如下图</p>
+<img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121322581-1913642501.png" alt="1713229011326" style="zoom:50%;">
+
+
+<h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>wo是射向眼镜（相机）的光线，包含来自光源的直接光照ws，来自其他物体的间接光照wi两部分。</p>
+<p>在实现path tracing时，我们考虑的是黄色线的方向，即光线从相机射向p点（实际上是从p点射向相机），然后通过多次随机采样从p点射出（实际上是射向p点）的光线得到该像素点的真实颜色。</p>
+<p>为了提高效率，将射向p的光线分为ws(光源)和wi（其他物体）计算。由于wi、ws分开计算，因此如果ws被物体挡住,或者wi打到光源均不计算。</p>
+<p>wi需要递归计算，通过神奇的Russian Roulette在减少递归层数的同时保持光照的期望不变。</p>
+<p>然后按照作业指南上的伪代码写就可以了</p>
+<img src="https://img2023.cnblogs.com/blog/1928276/202404/1928276-20240416121328730-1409855486.png" alt="1713230279835" style="zoom:80%;">
+
+
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>右墙壁发黑：检查Bound3::IntersectP, <code>return t_enter &lt;= t_exit &amp;&amp; t_exit &gt;= 0;</code> 就可以</li>
+<li>小正方体右上角有三角形黑块:检查Triangle::getIntersectionin Triangle.hpp，当时间小于0时不能判定为相交</li>
+<li>多线程：注意framebuffer的下标应该由m改为直接用i和j计算。CMakeLists.txt加一行 <code>TARGET_LINK_LIBRARIES(RayTracing pthread)</code>就好。</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="多线程优化"><a href="#多线程优化" class="headerlink" title="多线程优化"></a>多线程优化</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// change the spp value to change sample ammount</span></span><br><span class="line"><span class="type">int</span> spp = <span class="number">32</span>; <span class="comment">// default:16</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;SPP: &quot;</span> &lt;&lt; spp &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// for (uint32_t j = 0; j &lt; scene.height; ++j) &#123;</span></span><br><span class="line"><span class="comment">//     for (uint32_t i = 0; i &lt; scene.width; ++i) &#123;</span></span><br><span class="line"><span class="comment">//         // generate primary ray direction</span></span><br><span class="line"><span class="comment">//         float x = (2 * (i + 0.5) / (float)scene.width - 1) *</span></span><br><span class="line"><span class="comment">//                   imageAspectRatio * scale;</span></span><br><span class="line"><span class="comment">//         float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//         Vector3f dir = normalize(Vector3f(-x, y, 1));</span></span><br><span class="line"><span class="comment">//         for (int k = 0; k &lt; spp; k++)&#123;</span></span><br><span class="line"><span class="comment">//             framebuffer[m] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  </span></span><br><span class="line"><span class="comment">//         &#125;</span></span><br><span class="line"><span class="comment">//         m++;</span></span><br><span class="line"><span class="comment">//     &#125;</span></span><br><span class="line"><span class="comment">//     UpdateProgress(j / (float)scene.height);</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// UpdateProgress(1.f);</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> thread_cnt = <span class="number">12</span>;</span><br><span class="line"><span class="type">int</span> finished_thread = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> finished_width = <span class="number">0</span>;</span><br><span class="line">std::mutex mtx;</span><br><span class="line">  </span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, scene.height, scene.width);</span><br><span class="line"><span class="keyword">auto</span> multiThreadCastRay = [&amp;](<span class="type">uint32_t</span> y_min, <span class="type">uint32_t</span> y_max) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;start %d %d\n&quot;</span>, y_min, y_max);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">uint32_t</span> j = y_min; j &lt;= y_max; ++j) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">uint32_t</span> i = <span class="number">0</span>; i &lt; scene.width; ++i) &#123;</span><br><span class="line">            <span class="comment">// generate primary ray direction</span></span><br><span class="line">            <span class="type">float</span> x = (<span class="number">2</span> * (i + <span class="number">0.5</span>) / (<span class="type">float</span>)scene.width - <span class="number">1</span>) *</span><br><span class="line">                    imageAspectRatio * scale;</span><br><span class="line">            <span class="type">float</span> y = (<span class="number">1</span> - <span class="number">2</span> * (j + <span class="number">0.5</span>) / (<span class="type">float</span>)scene.height) * scale;</span><br><span class="line"></span><br><span class="line">            Vector3f dir = <span class="built_in">normalize</span>(<span class="built_in">Vector3f</span>(-x, y, <span class="number">1</span>));</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; spp; k++) &#123;</span><br><span class="line">                framebuffer[scene.width * j + i] += scene.<span class="built_in">castRay</span>(<span class="built_in">Ray</span>(eye_pos, dir), <span class="number">0</span>) / spp; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//printf(&quot;%d\n&quot;, j);</span></span><br><span class="line">        <span class="comment">//UpdateProgress(j / (float)scene.height);</span></span><br><span class="line">        mtx.<span class="built_in">lock</span>();</span><br><span class="line">        <span class="built_in">UpdateProgress</span>(++finished_width * <span class="number">1.0</span> / scene.width);</span><br><span class="line">        mtx.<span class="built_in">unlock</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ok %d %d\n&quot;</span>, y_min, y_max);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> block = scene.height / thread_cnt + (scene.height % thread_cnt != <span class="number">0</span>);</span><br><span class="line">std::thread th[thread_cnt];</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; thread_cnt; i++) &#123;</span><br><span class="line">    th[i] = std::<span class="built_in">thread</span>(multiThreadCastRay, i * block, std::<span class="built_in">min</span>((i + <span class="number">1</span>) * block - <span class="number">1</span>, scene.height));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; thread_cnt; i++) th[i].<span class="built_in">join</span>();</span><br><span class="line"><span class="built_in">UpdateProgress</span>(<span class="number">1.0</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="路径追踪"><a href="#路径追踪" class="headerlink" title="路径追踪"></a>路径追踪</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Implementation of Path Tracing</span></span><br><span class="line"><span class="function">Vector3f <span class="title">Scene::castRay</span><span class="params">(<span class="type">const</span> Ray &amp;ray, <span class="type">int</span> depth)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// TO DO Implement Path Tracing Algorithm here</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    shade(p, wo)</span></span><br><span class="line"><span class="comment">        sampleLight(inter , pdf_light)</span></span><br><span class="line"><span class="comment">        Get x, ws, NN, emit from inter</span></span><br><span class="line"><span class="comment">        Shoot a ray from p to x</span></span><br><span class="line"><span class="comment">        If the ray is not blocked in the middle</span></span><br><span class="line"><span class="comment">            L_dir = emit * eval(wo, ws, N) * dot(ws, N) * dot(ws,</span></span><br><span class="line"><span class="comment">            NN) / |x-p|^2 / pdf_light</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">        L_indir = 0.0</span></span><br><span class="line"><span class="comment">        //Test Russian Roulette with probability RussianRoulette</span></span><br><span class="line"><span class="comment">        wi = sample(wo, N)</span></span><br><span class="line"><span class="comment">        Trace a ray r(p, wi)</span></span><br><span class="line"><span class="comment">        If ray r hit a non-emitting object at q</span></span><br><span class="line"><span class="comment">            L_indir = shade(q, wi) * eval(wo, wi, N) * dot(wi, N)</span></span><br><span class="line"><span class="comment">            / pdf(wo, wi, N) / RussianRoulette</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">        Return L_dir + L_indir</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="function">Vector3f <span class="title">L_dir</span><span class="params">(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span>, <span class="title">L_indir</span><span class="params">(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="comment">//ray wo is screen to p, now find p and see if already hit light</span></span><br><span class="line">    Ray wo = ray;</span><br><span class="line">    Intersection p_inter = <span class="keyword">this</span>-&gt;<span class="built_in">intersect</span>(wo);</span><br><span class="line">    <span class="comment">//if hit nothing</span></span><br><span class="line">    <span class="keyword">if</span> (!p_inter.happened) <span class="keyword">return</span> L_dir;</span><br><span class="line">    <span class="comment">//if hit light source</span></span><br><span class="line">    <span class="keyword">if</span> (p_inter.m-&gt;<span class="built_in">hasEmission</span>()) <span class="keyword">return</span> p_inter.m-&gt;<span class="built_in">getEmission</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//otherwise, it hit a object</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//sampleLight(inter , pdf_light)</span></span><br><span class="line">    <span class="comment">//uniformly sample x from all LIGHTS and get its pdf</span></span><br><span class="line">    Intersection x_inter; <span class="type">float</span> x_pdf;</span><br><span class="line">    <span class="built_in">sampleLight</span>(x_inter, x_pdf);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Get x, ws, Nx, emit from inter </span></span><br><span class="line">    <span class="comment">//ws is from p to x(light), Np is at p, Nx is at x(light)</span></span><br><span class="line">    Vector3f p = p_inter.coords;</span><br><span class="line">    Vector3f x = x_inter.coords;</span><br><span class="line">    Vector3f Np = p_inter.normal;</span><br><span class="line">    Vector3f Nx = x_inter.normal;</span><br><span class="line">    Vector3f emit = x_inter.emit;  </span><br><span class="line"></span><br><span class="line">    <span class="comment">//Shoot a ray (ws) from p to x(light) </span></span><br><span class="line">    Vector3f ws_dir = (x - p).<span class="built_in">normalized</span>();</span><br><span class="line">    <span class="function">Ray <span class="title">ws</span><span class="params">(p, ws_dir)</span></span>;</span><br><span class="line">    Intersection ws_inter = <span class="keyword">this</span>-&gt;<span class="built_in">intersect</span>(ws);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If the ray is NOT blocked in the middle</span></span><br><span class="line">    <span class="comment">//         L_dir = emit * eval(wo, ws, N) * dot(ws, N) * dot(ws,</span></span><br><span class="line">    <span class="comment">//         NN) / |x-p|^2 / pdf_light</span></span><br><span class="line">    <span class="comment">// Else L_dir = 0.0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//calc length of p - x and ws_inter to see if it is blocked</span></span><br><span class="line">    <span class="type">float</span> px_dis = (x - p).<span class="built_in">norm</span>(), ws_dis = ws_inter.distance;</span><br><span class="line">    <span class="keyword">if</span> (px_dis - ws_dis &lt; <span class="number">0.001</span>) &#123;</span><br><span class="line">        L_dir = emit </span><br><span class="line">        * p_inter.m-&gt;<span class="built_in">eval</span>(wo.direction, ws.direction, Np)</span><br><span class="line">        * <span class="built_in">dotProduct</span>(ws.direction, Np)      <span class="comment">//all vectors were nomorlized</span></span><br><span class="line">        * <span class="built_in">dotProduct</span>(-ws.direction, Nx)     <span class="comment">//so dot product is cosine</span></span><br><span class="line">        / <span class="built_in">pow</span>(px_dis, <span class="number">2</span>)</span><br><span class="line">        / x_pdf;</span><br><span class="line">    &#125; <span class="comment">// else L_dir = 0; no need</span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">// Now calculate L_indir</span></span><br><span class="line">    <span class="comment">// Test Russian Roulette with probability RussianRoulette</span></span><br><span class="line">    <span class="type">float</span> P_rand = <span class="built_in">get_random_float</span>();</span><br><span class="line">    <span class="keyword">if</span> (P_rand &lt; RussianRoulette) &#123;</span><br><span class="line">        <span class="comment">//wi = sample(wo, N)</span></span><br><span class="line">        <span class="comment">//wi is from p to q</span></span><br><span class="line">        Vector3f wi_dir = p_inter.m-&gt;<span class="built_in">sample</span>(wo.direction, Np).<span class="built_in">normalized</span>();</span><br><span class="line">        <span class="function">Ray <span class="title">wi</span><span class="params">(p_inter.coords, wi_dir)</span></span>;</span><br><span class="line">        <span class="comment">// Trace a ray r(p, wi)</span></span><br><span class="line">        <span class="comment">// If ray r hit a non-emitting object at q</span></span><br><span class="line">        <span class="comment">//     L_indir = shade(q, wi) * eval(wo, wi, N) * dot(wi, N)</span></span><br><span class="line">        <span class="comment">//     / pdf(wo, wi, N) / RussianRoulette</span></span><br><span class="line">        Intersection wi_inter = <span class="keyword">this</span>-&gt;<span class="built_in">intersect</span>(wi);</span><br><span class="line">        <span class="keyword">if</span> (wi_inter.happened &amp;&amp; !(wi_inter.m-&gt;<span class="built_in">hasEmission</span>())) &#123;</span><br><span class="line">            L_indir = <span class="built_in">castRay</span>(wi, depth + <span class="number">1</span>)</span><br><span class="line">            * p_inter.m-&gt;<span class="built_in">eval</span>(wo.direction, wi.direction, Np)</span><br><span class="line">            * <span class="built_in">dotProduct</span>(wi.direction, Np)</span><br><span class="line">            / p_inter.m-&gt;<span class="built_in">pdf</span>(wo.direction, wi.direction, Np)</span><br><span class="line">            / RussianRoulette;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> L_dir + L_indir;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/14/hello-world-nya/" rel="prev" title="hello world nya">
+                  <i class="fa fa-angle-left"></i> hello world nya
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/06/TinyRendererNotes/" rel="next" title="TinyRendererNotes">
+                  TinyRendererNotes <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Wei Xianghan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
